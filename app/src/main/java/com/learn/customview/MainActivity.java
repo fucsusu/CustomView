@@ -9,7 +9,7 @@ import android.view.WindowManager;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.learn.customview.view.PaintPad;
+import com.learn.customview.view.PaintGroup;
 import com.learn.customview.bean.ToolsFormType;
 import com.learn.customview.bean.ToolsPenType;
 import com.learn.customview.bean.ToolsType;
@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public TextView penTypeContent;
-    public PaintPad mPaintPad;
+    public PaintGroup paintGroup;
     //画笔的类型
     private int toolsType = 0;
     private ToolsType[] toolsTypes = {ToolsType.pen, ToolsType.form, ToolsType.eraser};
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
         penTypeContent = findViewById(R.id.pen_type_content);
-        mPaintPad = findViewById(R.id.wb_paint_canvas);
+        paintGroup = findViewById(R.id.wb_paint_canvas);
         seekBar = findViewById(R.id.wb_paint_width);
         showPaintContent();
 
@@ -57,9 +57,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                mPaintPad.setmToolsPenProgress(seekBar.getProgress());
-                mPaintPad.setmToolsFormWidth(seekBar.getProgress());
-                mPaintPad.setmToolsEraserWidth(seekBar.getProgress());
+                paintGroup.setmToolsPenProgress(seekBar.getProgress());
+                paintGroup.setmToolsFormWidth(seekBar.getProgress());
+                paintGroup.setmToolsEraserWidth(seekBar.getProgress());
             }
         });
     }
@@ -74,11 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.wb_change_color:
                 int randomColor = getRandomColor();
-                mPaintPad.setmToolsPenColor(randomColor);
-                mPaintPad.setmToolsFormColor(randomColor);
+                paintGroup.setmToolsPenColor(randomColor);
+                paintGroup.setmToolsFormColor(randomColor);
                 break;
             case R.id.wb_clean:
-                mPaintPad.cleanActions();
+                paintGroup.cleanActions();
                 break;
         }
         showPaintContent();
@@ -89,11 +89,11 @@ public class MainActivity extends AppCompatActivity {
         switch (toolsType) {
             case 0://铅笔
                 toolsPenType = (toolsPenType + 1) % toolsPenTypes.length;
-                mPaintPad.setmToolsPenType(toolsPenTypes[toolsPenType]);
+                paintGroup.setmToolsPenType(toolsPenTypes[toolsPenType]);
                 break;
             case 1://图形
                 toolsFormType = (toolsFormType + 1) % toolsFormTypes.length;
-                mPaintPad.setmToolsFormType(toolsFormTypes[toolsFormType]);
+                paintGroup.setmToolsFormType(toolsFormTypes[toolsFormType]);
                 break;
         }
     }
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
     //设置模式
     private void setPaintMode() {
         toolsType = (toolsType + 1) % toolsTypes.length;
-        mPaintPad.setToolsType(toolsTypes[toolsType]);
+        paintGroup.setToolsType(toolsTypes[toolsType]);
     }
 
 

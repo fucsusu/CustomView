@@ -1,7 +1,11 @@
 package com.learn.customview.utils;
 
 
-public class ColorUtils {
+import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+
+public class Utils {
 
     /**
      * 0xff000000 类型转 RGB
@@ -48,6 +52,34 @@ public class ColorUtils {
     public static String toHexArgb(int alpha, int red, int green, int blue){
         String hex = String.format("#%d%02X%02X%02X",alpha, red, green, blue);
         return hex;
+    }
+
+
+    /**
+     * 显示键盘
+     * @param context
+     * @param et
+     */
+    public static void showKeyBoard(Context context, EditText et) {
+        if (context == null || et == null) {
+            return;
+        }
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT,0);
+        imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
+    }
+
+    /**
+     * 隐藏键盘
+     * @param context
+     * @param et
+     */
+    public static void hideKeyBoard(Context context, EditText et) {
+        if (context == null || et == null) {
+            return;
+        }
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(et.getWindowToken(), 0);
     }
 
 }

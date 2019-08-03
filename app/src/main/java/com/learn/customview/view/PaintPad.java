@@ -16,12 +16,13 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.learn.customview.bean.PaintActionBean;
 import com.learn.customview.bean.ToolsFormType;
 import com.learn.customview.bean.ToolsPenType;
 import com.learn.customview.bean.ToolsType;
-import com.learn.customview.utils.ColorUtils;
+import com.learn.customview.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,9 +89,16 @@ public class PaintPad extends View {
     private Paint linePaint = new Paint();
     private Paint bgPaint = new Paint();
 
+    public PaintPad(Context context) {
+        super(context);
+    }
 
     public PaintPad(Context context, AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public PaintPad(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
     }
 
     private String[] whiteBoardbackground = {"#ffffff", "#000000", "#415646",
@@ -410,9 +418,7 @@ public class PaintPad extends View {
             mActionfill = true;
             mPenWidth = mToolsEraserWidth;
         }
-
         if (mActionMode == null) return true;
-
         float downX = event.getX();
         float downY = event.getY();
         switch (mActionMode) {
@@ -425,19 +431,16 @@ public class PaintPad extends View {
                 if (mCurrentPaintActionBean == null) {
                     mCurrentPaintActionBean = new PaintActionBean();
                     mCurrentPaintActionBean.nActionMode = mActionMode;
-
                     double penwidth = mPenWidth * 1.0 * 60 / 100;
                     mCurrentPaintActionBean.nPenWidth = (int) penwidth;
                     if (mActionMode == PaintActionBean.PAType.pa_markerPen && !mActionfill) {
-                        Integer[] rgb = ColorUtils.RGB(mPenColor);
-                        String argb = ColorUtils.toHexArgb(80, rgb[0], rgb[1], rgb[2]);
+                        Integer[] rgb = Utils.RGB(mPenColor);
+                        String argb = Utils.toHexArgb(80, rgb[0], rgb[1], rgb[2]);
                         mCurrentPaintActionBean.nPenColor = Color.parseColor(argb);
                     } else {
                         mCurrentPaintActionBean.nPenColor = mPenColor;
                     }
-
                     mCurrentPaintActionBean.bIsFill = mActionfill;
-
                     mCurrentPaintActionBean.alActionPoint.add(relativePoint(new PointF(downX, downY)));
                 }
             }
@@ -554,8 +557,8 @@ public class PaintPad extends View {
         mCurrentPaintActionBean.alActionPoint = new ArrayList<PointF>();
         mCurrentPaintActionBean.alActionPoint.add(relativePoint(new PointF(x, y)));
         mCurrentPaintActionBean.sText = strtext;
-        this.invalidate();
         mCurrentPaintActionBean = null;
+        this.invalidate();
     }
 
     /**

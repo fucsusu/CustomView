@@ -57,7 +57,7 @@
             android:progress="20" />
     </LinearLayout>
 
-    <com.learn.customview.view.PaintPad
+    <com.learn.customview.view.PaintGroup
         android:id="@+id/wb_paint_canvas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
