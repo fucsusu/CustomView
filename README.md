@@ -7,3 +7,4 @@
 
 图形</br>
 支持矩形（空心/实心），椭圆（空心/实心）
+![](https://github.com/fucsusu/imageCache/raw/master/whiteBoard.jpg)  
