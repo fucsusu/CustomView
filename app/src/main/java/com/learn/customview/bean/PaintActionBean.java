@@ -19,7 +19,7 @@ public class PaintActionBean {
         pa_Rectangle,//矩形
         pa_Ellipse, //椭圆
         pa_Text,  //文本
-        pa_Eraser;  //橡皮擦
+        pa_Eraser  //橡皮擦
     }
     //模式
     public PAType nActionMode;

@@ -30,6 +30,13 @@ import java.util.List;
  * 自定义画板  切换颜色和粗细
  * 1.实现画笔
  * 2.实现图形 矩形 椭圆
+ * <p>
+ * <p>
+ * 文字
+ * 橡皮檫
+ * 缩放
+ * 笔迹的回退
+ * 分层缓存处理
  */
 public class PaintPad extends View {
 
@@ -270,7 +277,7 @@ public class PaintPad extends View {
                     break;
                 }
 
-                StaticLayout layout; //闂佽法鍠愰弸濠氬箯閻戣姤鏅搁柡鍌樺�栫�氾拷
+                StaticLayout layout;
                 if (cvs.getWidth() > ptStart.x) {
                     layout = new StaticLayout(tl_pa.sText, textPaint, (int) (cvs.getWidth() - ptStart.x), Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
                 } else {
@@ -539,7 +546,6 @@ public class PaintPad extends View {
      */
     public void onInsertText(String strtext, float x, float y) {
         mCurrentPaintActionBean = new PaintActionBean();
-
         mCurrentPaintActionBean.nActionMode = PaintActionBean.PAType.pa_Text;
         double penwidth = mPenWidth * 1.0 * 60 / 100;
         mCurrentPaintActionBean.nPenWidth = (int) penwidth;

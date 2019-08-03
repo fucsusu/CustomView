@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     public PaintPad mPaintPad;
     //画笔的类型
     private int toolsType = 0;
-    private ToolsType[] toolsTypes = {ToolsType.pen, ToolsType.form};
+    private ToolsType[] toolsTypes = {ToolsType.pen, ToolsType.form, ToolsType.eraser};
     //铅笔模式
     private int toolsPenType = 0;
     private ToolsPenType[] toolsPenTypes = {ToolsPenType.fountainPen, ToolsPenType.line, ToolsPenType.arrows, ToolsPenType.nitePen};
@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 mPaintPad.setmToolsPenProgress(seekBar.getProgress());
                 mPaintPad.setmToolsFormWidth(seekBar.getProgress());
+                mPaintPad.setmToolsEraserWidth(seekBar.getProgress());
             }
         });
     }
@@ -99,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
     //设置模式
     private void setPaintMode() {
-        toolsType = (toolsType + 1) % 2;
+        toolsType = (toolsType + 1) % toolsTypes.length;
         mPaintPad.setToolsType(toolsTypes[toolsType]);
     }
 
@@ -159,6 +160,9 @@ public class MainActivity extends AppCompatActivity {
                         stringBuilder.append("实心矩形");
                         break;
                 }
+                break;
+            case 2:
+                stringBuilder.append("橡皮檫");
                 break;
         }
         penTypeContent.setText(stringBuilder.toString());
