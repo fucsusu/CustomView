@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     public PaintGroup paintGroup;
     //画笔的类型
     private int toolsType = 0;
-    private ToolsType[] toolsTypes = {ToolsType.pen, ToolsType.form, ToolsType.eraser};
+    private ToolsType[] toolsTypes = {ToolsType.pen, ToolsType.form, ToolsType.eraser, ToolsType.font};
     //铅笔模式
     private int toolsPenType = 0;
     private ToolsPenType[] toolsPenTypes = {ToolsPenType.fountainPen, ToolsPenType.line, ToolsPenType.arrows, ToolsPenType.nitePen};
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
                 paintGroup.setmToolsPenProgress(seekBar.getProgress());
                 paintGroup.setmToolsFormWidth(seekBar.getProgress());
                 paintGroup.setmToolsEraserWidth(seekBar.getProgress());
+                paintGroup.setmToolsFontSize(seekBar.getProgress());
             }
         });
     }
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 int randomColor = getRandomColor();
                 paintGroup.setmToolsPenColor(randomColor);
                 paintGroup.setmToolsFormColor(randomColor);
+                paintGroup.setmToolsFontColor(randomColor);
                 break;
             case R.id.wb_clean:
                 paintGroup.cleanActions();
@@ -163,6 +165,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 2:
                 stringBuilder.append("橡皮檫");
+                break;
+            case 3:
+                stringBuilder.append("文本");
                 break;
         }
         penTypeContent.setText(stringBuilder.toString());

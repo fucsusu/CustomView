@@ -13,6 +13,7 @@ import android.os.Build;
 import android.text.Layout.Alignment;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -59,8 +60,6 @@ public class PaintPad extends View {
 
     //显示画布大小
     private RectF m_rcBK = new RectF();
-    //文字
-    private RectF m_orgRcBK = null;
     //工具类型
     private ToolsType mToolsType = ToolsType.pen;
 
@@ -88,6 +87,10 @@ public class PaintPad extends View {
     public List<PaintActionBean> paintActionBeans = new ArrayList<>();
     private Paint linePaint = new Paint();
     private Paint bgPaint = new Paint();
+
+    private PaintGroup.PaintDownXY paintDownXY;
+
+    private boolean isInputEd = false;
 
     public PaintPad(Context context) {
         super(context);
@@ -339,6 +342,10 @@ public class PaintPad extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        //当文字输入时直接返回
+        if (isInputEd) {
+            return true;
+        }
         int nAction = event.getAction();
         boolean bhandle = true;
         switch (nAction) {
@@ -533,11 +540,11 @@ public class PaintPad extends View {
      * @param x
      * @param y
      */
-    public void insertText(final float x, final float y) {
-
-        m_orgRcBK = new RectF(m_rcBK);
-
-        //TODO 输入文字
+    public void insertText(float x, float y) {
+        // 输入文字
+        isInputEd = true;
+        paintDownXY.penPropertyChange(mPenWidth, mPenColor);
+        paintDownXY.paintDownXY(x, y);
     }
 
     /**
@@ -548,17 +555,20 @@ public class PaintPad extends View {
      * @param y
      */
     public void onInsertText(String strtext, float x, float y) {
-        mCurrentPaintActionBean = new PaintActionBean();
-        mCurrentPaintActionBean.nActionMode = PaintActionBean.PAType.pa_Text;
-        double penwidth = mPenWidth * 1.0 * 60 / 100;
-        mCurrentPaintActionBean.nPenWidth = (int) penwidth;
-        mCurrentPaintActionBean.nPenColor = mPenColor;
-        mCurrentPaintActionBean.bIsFill = mActionfill;
-        mCurrentPaintActionBean.alActionPoint = new ArrayList<PointF>();
-        mCurrentPaintActionBean.alActionPoint.add(relativePoint(new PointF(x, y)));
-        mCurrentPaintActionBean.sText = strtext;
-        mCurrentPaintActionBean = null;
-        this.invalidate();
+        isInputEd = false;
+        if (!TextUtils.isEmpty(strtext)) {
+            mCurrentPaintActionBean = new PaintActionBean();
+            mCurrentPaintActionBean.nActionMode = PaintActionBean.PAType.pa_Text;
+            mCurrentPaintActionBean.nPenWidth = mPenWidth;
+            mCurrentPaintActionBean.nPenColor = mPenColor;
+            mCurrentPaintActionBean.bIsFill = mActionfill;
+            mCurrentPaintActionBean.alActionPoint = new ArrayList<PointF>();
+            mCurrentPaintActionBean.alActionPoint.add(relativePoint(new PointF(x, y)));
+            mCurrentPaintActionBean.sText = strtext;
+            paintActionBeans.add(mCurrentPaintActionBean);
+            mCurrentPaintActionBean = null;
+            this.invalidate();
+        }
     }
 
     /**
@@ -656,15 +666,8 @@ public class PaintPad extends View {
      */
     public PointF relativePoint(PointF point) {
         PointF real = new PointF();
-        //是否是文字输入坐标
-        if (this.m_orgRcBK != null) {
-            real.x = (point.x - m_orgRcBK.left) / m_orgRcBK.width();
-            real.y = (point.y - m_orgRcBK.top) / m_orgRcBK.height();
-            m_orgRcBK = null;
-        } else {
-            real.x = (point.x - m_rcBK.left) / m_rcBK.width();
-            real.y = (point.y - m_rcBK.top) / m_rcBK.height();
-        }
+        real.x = (point.x - m_rcBK.left) / m_rcBK.width();
+        real.y = (point.y - m_rcBK.top) / m_rcBK.height();
         return real;
     }
 
@@ -804,6 +807,11 @@ public class PaintPad extends View {
         paintActionBeans.clear();
         mCurrentPaintActionBean = null;
         postInvalidate();
+    }
+
+    //设置文字点击位置回调
+    public void setPaintDownXY(PaintGroup.PaintDownXY paintDownXY) {
+        this.paintDownXY = paintDownXY;
     }
 }
 
